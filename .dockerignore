@@ -1,0 +1,15 @@
+.git
+.gitignore
+.idea
+.junie
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.ruff_cache
+.mypy_cache
+.env
+Dockerfile
+.dockerignore
+README.md
+compose.yaml
