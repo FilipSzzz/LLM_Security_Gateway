@@ -40,6 +40,12 @@ safe. Detection is probabilistic, so the project measures its own accuracy (see 
 - `POST /v1/chat` forwards a prompt to the model and returns only the model's answer.
 - **Strict input validation** with Pydantic. The prompt must be 1 to 8000 characters. Invalid
   requests get `422` and never reach the provider.
+- **Prompt injection detector.** Regex rules in six groups (instruction override, prompt
+  leakage, role hijacking, "no rules" requests, encoded payloads, chat-template delimiters), kept as data in
+  `app/services/rules/injection.toml`. The text is normalized first (Unicode tricks, case,
+  punctuation), so the rules stay short. A blocked prompt gets `400` and **never reaches the
+  provider**. The detector has a `name`, a `version` and a
+  `check(text)` method that returns a decision and a reason; the reason goes to the logs only.
 - **Strict response shape.** A `response_model` returns only `reply`, so extra provider fields
   (usage, provider name) cannot leak to the caller.
 - **One shared `httpx.AsyncClient`** is created in the FastAPI lifespan, so connections are reused
@@ -64,6 +70,7 @@ problem is on the gateway's side or behind it.
 | Situation | Status to caller | Why |
 |---|---|---|
 | Invalid body (empty or too long prompt) | `422` | The caller's mistake; the provider is never called |
+| Prompt blocked by a detector | `400` | The content was refused; the provider is never called |
 | Provider rate limit (`429`) | `429` + `Retry-After` | The caller can wait and retry |
 | Provider too slow (read timeout) | `504` | The gateway gave up waiting |
 | Provider unreachable (DNS, connection) | `502` | Bad gateway; the caller cannot fix it |
@@ -144,7 +151,7 @@ Each decision lists one alternative that was rejected.
 | # | Step | What it adds |
 |---|---|---|
 | 0 | Transparent proxy | Done: everything in "What works today" |
-| 1 | First detector | Regex rules for prompt injection; a shared detector interface (`name`, `version`, `check(text)`); blocked prompts never reach the provider |
+| 1 | First detector | Done: regex rules for prompt injection; a shared detector interface (`name`, `version`, `check(text)`); blocked prompts never reach the provider |
 | 2 | Benchmark | About 200 labeled prompts (attacks and harmless ones); precision, recall, false positive rate and p95 latency; a side-by-side comparison with an open-source guardrail (LLM Guard) |
 | 3 | Monitoring | Prometheus `/metrics`, a Grafana RED dashboard (rate, errors, duration), block rate per detector, gateway overhead measured separately from model time |
 | 4 | PII masking | PESEL (with checksum), e-mail and card numbers replaced with placeholders before the prompt leaves |
