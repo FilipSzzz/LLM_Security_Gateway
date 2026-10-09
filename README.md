@@ -1,6 +1,6 @@
 # LLM Security Gateway
 
-[![CI](https://github.com/FilipSzzz/LLM_Gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/FilipSzzz/LLM_Gateway/actions/workflows/ci.yml)
+[![CI](https://github.com/FilipSzzz/LLM_Security_Gateway/actions/workflows/ci.yml/badge.svg)](https://github.com/FilipSzzz/LLM_Security_Gateway/actions/workflows/ci.yml)
 ![Python 3.14](https://img.shields.io/badge/python-3.14-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-async-teal)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
