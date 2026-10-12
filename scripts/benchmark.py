@@ -38,6 +38,24 @@ p95_ms = statistics.quantiles(latencies, n=100)[94] * 1000
 recall = true_positive / (true_positive + false_negative)
 fpr = false_positive / (false_positive + true_negative)
 
+precision = true_positive / (true_positive + false_positive)
+results = {
+    "detector": regex_detector.name,
+    "version": regex_detector.version,
+    "dataset": DATASET.name,
+    "tp": true_positive,
+    "fp": false_positive,
+    "tn": true_negative,
+    "fn": false_negative,
+    "recall": round(recall, 4),
+    "precision": round(precision, 4),
+    "fpr": round(fpr, 4),
+    "p95_ms": round(p95_ms, 3),
+}
+out = DATASET.parent / "results" / f"{results['detector']}_{results['version']}.json"
+out.parent.mkdir(exist_ok=True)
+out.write_text(json.dumps(results, indent=2) + "\n")
+
 print(f"Total: tp {true_positive}, tn: {true_negative}, fp: {false_positive}, fn: {false_negative}")
 print(f"Recall: {recall} and fpr: {fpr}")
 print(f"P95 latency: {p95_ms:.3f} ms")
