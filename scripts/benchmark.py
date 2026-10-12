@@ -1,4 +1,6 @@
 import json
+import statistics
+import time
 from pathlib import Path
 
 from app.services.detector import DetectorDecision, regex_detector
@@ -10,12 +12,15 @@ true_negative = 0
 false_positive = 0
 false_negative = 0
 
+latencies = []
 with open(DATASET) as json_file:
     json_list = list(json_file)
 
 for json_str in json_list:
     row = json.loads(json_str)
+    start = time.perf_counter()
     result = regex_detector.check(row["text"])
+    latencies.append(time.perf_counter() - start)
     blocked = result.decision == DetectorDecision.BLOCK
     is_attack = row["label"] == "attack"
     if blocked and is_attack:
@@ -29,10 +34,10 @@ for json_str in json_list:
     else:
         true_negative += 1
 
-
-
-recalls = true_positive / (true_positive + false_negative)
+p95_ms = statistics.quantiles(latencies, n=100)[94] * 1000
+recall = true_positive / (true_positive + false_negative)
 fpr = false_positive / (false_positive + true_negative)
 
 print(f"Total: tp {true_positive}, tn: {true_negative}, fp: {false_positive}, fn: {false_negative}")
-print(f"Recalls: {recalls} and fpr: {fpr}")
+print(f"Recall: {recall} and fpr: {fpr}")
+print(f"P95 latency: {p95_ms:.3f} ms")
