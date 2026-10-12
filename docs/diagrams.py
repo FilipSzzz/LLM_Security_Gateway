@@ -198,7 +198,7 @@ def roadmap():
     items = [
         ("0. Transparent proxy", "FastAPI, httpx, settings,\nerror mapping, respx tests", "done"),
         ("1. First detector", "regex rules, detector\ninterface, block response", "done"),
-        ("2. Benchmark", "~200 labeled prompts,\nprecision, recall, p95;\nvs LLM Guard", "wip"),
+        ("2. Benchmark", "220 labeled prompts,\nrecall 26%, FPR 5%,\np95 < 1 ms", "done"),
         ("3. Monitoring", "Prometheus metrics,\nGrafana RED dashboard", "planned"),
         ("4. PII masking", "PESEL checksum,\ne-mail, card numbers", "planned"),
         ("5. Rate limiting", "Redis, per API key", "planned"),
