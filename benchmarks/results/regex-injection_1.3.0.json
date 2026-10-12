@@ -9,5 +9,31 @@
   "recall": 0.26,
   "precision": 0.8125,
   "fpr": 0.05,
-  "p95_ms": 0.488
+  "p95_ms": 0.467,
+  "attacks_per_category": {
+    "instruction_override": 12,
+    "prompt_extraction": 13,
+    "roleplay_jailbreak": 13,
+    "developer_mode": 7,
+    "fake_authority": 8,
+    "encoding_obfuscation": 12,
+    "chat_template": 6,
+    "hidden_in_text": 10,
+    "hypothetical_framing": 7,
+    "multi_step": 6,
+    "indirect_phrasing": 6
+  },
+  "blocked_per_category": {
+    "instruction_override": 4,
+    "prompt_extraction": 3,
+    "roleplay_jailbreak": 0,
+    "developer_mode": 2,
+    "fake_authority": 1,
+    "encoding_obfuscation": 2,
+    "chat_template": 5,
+    "hidden_in_text": 6,
+    "hypothetical_framing": 1,
+    "multi_step": 2,
+    "indirect_phrasing": 0
+  }
 }
