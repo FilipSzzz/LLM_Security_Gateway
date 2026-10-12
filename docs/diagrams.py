@@ -136,7 +136,7 @@ def architecture():
     req = [
         ("1. Auth +\nrate limit", "per API key\n(Redis)", "planned"),
         ("2. Validation", "Pydantic: type,\nlength 1-8000", "done"),
-        ("3. Injection\ndetectors", "regex rules first,\nLLM judge later", "wip"),
+        ("3. Injection\ndetectors", "regex rules (TOML),\nblock = 400", "done"),
         ("4. PII masking", "PESEL, e-mail,\ncard numbers", "planned"),
         ("5. Forward", "httpx AsyncClient,\ntimeouts, errors", "done"),
     ]
@@ -197,8 +197,8 @@ def roadmap():
     legend(ax, 9.3, 5.95)
     items = [
         ("0. Transparent proxy", "FastAPI, httpx, settings,\nerror mapping, respx tests", "done"),
-        ("1. First detector", "regex rules, detector\ninterface, block response", "wip"),
-        ("2. Benchmark", "~200 labeled prompts,\nprecision, recall, p95;\nvs LLM Guard", "planned"),
+        ("1. First detector", "regex rules, detector\ninterface, block response", "done"),
+        ("2. Benchmark", "~200 labeled prompts,\nprecision, recall, p95;\nvs LLM Guard", "wip"),
         ("3. Monitoring", "Prometheus metrics,\nGrafana RED dashboard", "planned"),
         ("4. PII masking", "PESEL checksum,\ne-mail, card numbers", "planned"),
         ("5. Rate limiting", "Redis, per API key", "planned"),

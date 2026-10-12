@@ -1,0 +1,57 @@
+version = "1.3.0"
+
+[rules.instruction_override]
+patterns = [
+    '(ignore|ignoring|ignored|disregard|disregarding|forget|forgetting|forgot|forgotten|skip|bypass|override|neglect|omit|overlook|discard|dismiss|abandon|set aside|pay no attention to|do not follow|dont follow|stop following|do not obey|dont obey|stop obeying)( \w+){0,3}? (previous|prior|above|earlier|preceding|initial|original|your|all|safety|system)( \w+){0,2}? (instructions?|rules|prompts?|directions|guidelines|context|messages?|commands?|directives?|constraints|programming|training)',
+    '(ignore|disregard|forget|skip)( everything| anything| all)?( the)? above',
+    '(previous|prior|above|earlier|old|original) (instructions|rules|prompt|guidelines) (are|were|is) (now )?(void|invalid|cancelled|canceled|outdated|obsolete|fake|wrong|no longer (valid|apply|relevant))',
+    'your new (instructions|rules|task|goal|purpose) (are|is)',
+    'system override',
+]
+raw_patterns = [
+    '\bnew instructions?\s*:',
+]
+
+[rules.prompt_leakage]
+patterns = [
+    '(reveal|show|print|repeat|output|display|leak|dump|expose|share|recite|spell out|tell me|give me)( \w+){0,3}? ((system|initial|hidden|original|secret|internal|developer) (prompt|instructions|message)|your (instructions|rules|prompt|guidelines|configuration))',
+    '(repeat|print|output|show|display|write)( \w+){0,3}? (text|words|everything) (above|before this)',
+    '(starting|start|begin|beginning) with you are',
+    'what(s| is| are| was| were) your (system prompt|(initial|original|exact|hidden|secret) instructions)',
+    'instructions you (were|have been) given',
+]
+
+[rules.role_hijacking]
+patterns = [
+    '(you are|youre|pretend to be|pretend you are|pretend youre|imagine you are|imagine youre) (now )?(in )?(an? )?(dan|stan|dude|developer mode|jailbroken|unrestricted|unfiltered|uncensored|amoral|unbound|unchained|limitless)',
+    '(act|behave) as (an? )?(dan|stan|dude|jailbroken|unrestricted|unfiltered|uncensored|amoral|unbound|unchained|limitless)',
+    'you (can |will )?do anything now',
+    '(dan|jailbreak|unrestricted|uncensored|unfiltered) mode',
+    '(pretend|act as|roleplay as|role play as|play) (to be )?my (deceased|dead|late) (grandma|grandmother)',
+]
+
+[rules.no_rules_request]
+patterns = [
+    'you (have|had) no (rules|restrictions|filters|guidelines|limits|limitations|ethics|morals)',
+    '(respond|answer|reply|talk|speak|write)( \w+){0,3}? without (any )?(restrictions|filters|censorship|guidelines|limits|limitations|ethics|morals|rules)',
+    'not bound by (any )?(rules|restrictions|guidelines|policies|filters|limitations|ethics)',
+    '(you are|youre|break|broken|breaking) free (of|from) (all |any )?(the )?(typical )?(rules|restrictions|guidelines|limitations|filters|confines|policies)',
+    '(disable|turn off|deactivate|remove|bypass|ignore|override) (all )?your (safety|content|security) (filters?|guidelines|policies|measures|settings|restrictions|protocols)',
+]
+
+[rules.encoded_payload]
+patterns = [
+    '(decode|decrypt)( this| the following| it)?( base64| hex| rot13| binary)?( string| text| message)? (and|then) (execute|run|follow|obey|do what it says)',
+]
+
+[rules.delimiter_injection]
+raw_patterns = [
+    '<\|im_start\|>',
+    '<\|im_end\|>',
+    '<\|(system|user|assistant)\|>',
+    '<\|(begin_of_text|start_header_id|end_header_id|eot_id|endoftext)\|>',
+    '<(start|end)_of_turn>',
+    '\[/?inst\]',
+    '<</?sys>>',
+    '"role"\s*:\s*"system"',
+]
