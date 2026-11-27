@@ -46,6 +46,10 @@ safe. Detection is probabilistic, so the project measures its own accuracy (see 
   punctuation), so the rules stay short. A blocked prompt gets `400` and **never reaches the
   provider**. The detector has a `name`, a `version` and a
   `check(text)` method that returns a decision and a reason; the reason goes to the logs only.
+- **PII masking.** Before the prompt leaves the gateway, PESEL numbers (only those with a valid
+  date and check digit), card numbers (13-19 digits that pass the Luhn check) and e-mail
+  addresses are replaced with `[PESEL]`, `[CARD]` and `[EMAIL]`. Logs record only how many
+  values were masked, never the values.
 - **Strict response shape.** A `response_model` returns only `reply`, so extra provider fields
   (usage, provider name) cannot leak to the caller.
 - **One shared `httpx.AsyncClient`** is created in the FastAPI lifespan, so connections are reused
@@ -243,8 +247,8 @@ Each decision lists one alternative that was rejected.
 | 1 | First detector | Done: regex rules for prompt injection; a shared detector interface (`name`, `version`, `check(text)`); blocked prompts never reach the provider |
 | 2 | Benchmark | Done: 220 labeled prompts (attacks and harmless ones); recall, precision, false positive rate, p95 latency and results per attack category (see "Benchmark") |
 | 3 | Monitoring | Prometheus `/metrics`, a Grafana RED dashboard (rate, errors, duration), block rate per detector, gateway overhead measured separately from model time |
-| 4 | PII masking | PESEL (with checksum), e-mail and card numbers replaced with placeholders before the prompt leaves |
-| 5 | Rate limiting | Per API key, with Redis |
+| 4 | PII masking | Done: PESEL (with checksum), e-mail and card numbers (Luhn) replaced with placeholders before the prompt leaves |
+| 5 | Rate limiting | In progress: per API key, with Redis |
 | 6 | Access management | Hashed API keys in PostgreSQL, roles (caller / admin / auditor), rotation and revocation, audit log |
 | 7 | LLM-as-judge | A second model checks only suspicious prompts; cost compared with accuracy gain |
 | 8 | Detector registry | Detectors as plug-ins with versions and benchmark scores, enabled per tenant |

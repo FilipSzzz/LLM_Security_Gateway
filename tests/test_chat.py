@@ -1,3 +1,6 @@
+import json
+import logging
+
 import httpx
 import pytest
 import respx
@@ -42,6 +45,18 @@ def test_injection_is_blocked_before_upstream(client, caplog):
     assert "detector=regex-injection" in caplog.text
     assert "reason=instruction_override" in caplog.text
     assert prompt not in caplog.text
+
+
+@respx.mock
+def test_pii_is_masked_before_upstream_and_not_logged(client, caplog):
+    caplog.set_level(logging.INFO)
+    route = respx.post(settings.openrouter_url).respond(200, json=UPSTREAM_OK)
+    prompt = "My PESEL is 44051401359, mail jan@example.com, card 4111 1111 1111 1111"
+    assert client.post("/v1/chat", json={"prompt": prompt}).status_code == 200
+    sent = json.loads(route.calls.last.request.content)["messages"][0]["content"]
+    raw = ["44051401359", "jan@example.com", "4111"]
+    assert all(p in sent for p in ["[PESEL]", "[EMAIL]", "[CARD]"])
+    assert not any(r in sent or r in caplog.text for r in raw)
 
 
 @respx.mock
