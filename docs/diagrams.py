@@ -137,7 +137,7 @@ def architecture():
         ("1. Auth +\nrate limit", "per API key\n(Redis)", "planned"),
         ("2. Validation", "Pydantic: type,\nlength 1-8000", "done"),
         ("3. Injection\ndetectors", "regex rules (TOML),\nblock = 400", "done"),
-        ("4. PII masking", "PESEL, e-mail,\ncard numbers", "planned"),
+        ("4. PII masking", "PESEL, e-mail,\ncard numbers", "done"),
         ("5. Forward", "httpx AsyncClient,\ntimeouts, errors", "done"),
     ]
     for x, (t, s, st) in zip(xs, req, strict=True):
@@ -200,8 +200,8 @@ def roadmap():
         ("1. First detector", "regex rules, detector\ninterface, block response", "done"),
         ("2. Benchmark", "220 labeled prompts,\nrecall 26%, FPR 5%,\np95 < 1 ms", "done"),
         ("3. Monitoring", "Prometheus metrics,\nGrafana RED dashboard", "planned"),
-        ("4. PII masking", "PESEL checksum,\ne-mail, card numbers", "planned"),
-        ("5. Rate limiting", "Redis, per API key", "planned"),
+        ("4. PII masking", "PESEL checksum,\ne-mail, card numbers", "done"),
+        ("5. Rate limiting", "Redis, per API key", "wip"),
         ("6. Access mgmt", "hashed keys, roles,\nPostgreSQL, 401 vs 403", "planned"),
         ("7. LLM-as-judge", "second model for\nsuspicious prompts", "planned"),
         ("8. Detector registry", "plug-in detectors,\nper-tenant config", "planned"),
